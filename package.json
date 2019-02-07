@@ -1,0 +1,8 @@
+{
+  "name": "printShop",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/disgraceTerror/printShop",
+  "author": "disgraceTerror <dan100anderson@gmail.com>",
+  "license": "MIT"
+}

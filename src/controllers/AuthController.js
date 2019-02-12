@@ -1,9 +1,11 @@
-const express = require("express");
 require("dotenv-safe").load();
-const jwt = require("jsonwebtoken");
+
 const User = require("../models/User");
+
 const bcrypt = require("bcrypt");
+
 const UserServices = require("../services/UserServices");
+
 
 module.exports = {
   async store(req, res) {
@@ -17,28 +19,24 @@ module.exports = {
 
       const user = await User.create({ userName, password });
       return res.json(user);
-    } catch {
-      res.status("500").send("Algo deu errado!");
+    } catch(err) {
+      res.status("500").send("Algo deu errado! "+err);
     }
   },
 
   async auth(req, res, next) {
     //console.log(await UserServices.authenticate(req.body.userName, req.body.password));
     try {
-      const user = await User.findOne({
-        userName: req.body.userName
-      });
+      let token = await UserServices.authenticate(
+        req.body.userName,
+        req.body.password
+      );
 
-      const { _id } = user;
-       
-      if (UserServices.authenticate(user.userName, req.body.password)) {
-        let token = jwt.sign( { _id } , process.env.SECRET, {
-          expiresIn: 800 // expires in 5min
-        });
-        res.status(200).send({ token: token });
-      }
-    } catch(err) {
-      res.status(500).send("Algo deu errado! "+ err);
+      if (token == 1) res.status(403).send("O nome de usuário não existe!");
+      else if (token == 2) res.status(403).send("Senha incorreta!");
+      else res.status(200).send({ token: token });
+    } catch (err) {
+      res.status(500).send("Algo deu errado! " + err);
     }
   },
 

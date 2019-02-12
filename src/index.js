@@ -10,11 +10,15 @@ const cors = require("cors");
 
 conection();
 
+app.get("/", function(req, res) {
+    res.send("Bem vindo ao PrintShop API!");
+})
+
 app.use(cors());
 app.use(express.json());
 app.use(require("./routes"));
 
-app.listen(3000, () => {
+app.listen(process.env.PORT || 3000, () => {
     console.log("Server start on port 3000");
 });
 

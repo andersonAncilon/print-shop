@@ -16,11 +16,13 @@ module.exports = {
 
       const userName = req.body.userName;
       const password = bcrypt.hashSync(req.body.password, 10);
+      const name = req.body.name;
 
-      const user = await User.create({ userName, password });
-      return res.json(user);
-    } catch(err) {
-      res.status("500").send("Algo deu errado! "+err);
+      await User.create({ name, userName, password });
+
+      return res.json({ name, userName });
+    } catch (err) {
+      res.status("500").send("Algo deu errado! " + err);
     }
   },
 
